@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: black;
+      color: white;
+      overflow-x: hidden;
+      cursor: pointer;
+    }
+    .main-section {
+      background-color: black;
+      width: 100%;
+      color: aliceblue;
+
+      position: relative;
+      margin-top: 250px;
+      margin-left: 450px;
+    }
+    input {
+      border-radius: 12px;
+      width: 350px;
+      height: 50px;
+      padding: 8px;
+      font-size: 20px;
+      cursor: pointer;
+      color: rgb(13, 13, 13);
+      background-color: rgb(208, 241, 208);
+    }
+
+    .buttons {
+      width: 600px;
+      height: 200px;
+      margin-top: 80px;
+    }
+
+    #start,
+    #pause,
+    #reset {
+      width: 120px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #e88c8c;
+      color: black;
+      font: 200;
+      font-size: 1rem;
+    }
+
+    #timer {
+      font: 200;
+      font-size: 2rem;
+      background: #badaee;
+      color: black;
+      width: 200px;
+      padding: 7px;
+      border-radius: 12px;
+      margin-left: 80px;
+      text-align: center;
+    }
+
+    @media (width<= 640px) {
+      .main-section {
+        position: relative;
+        margin-top: 250px;
+
+        margin-left: -10px;
+      }
+      .buttons {
+        width: 300px;
+        margin-left: 20px;
+      }
+      input {
+        width: 250px;
+        height: 50px;
+        padding: 8px;
+        font-size: 20px;
+        margin-left: 20px;
+      }
+
+      #start,
+      #pause,
+      #reset {
+        width: 80px;
+        padding: 10px;
+        border-radius: 12px;
+
+        color: black;
+        font: 200;
+        font-size: 1.5rem;
+      }
+      #timer {
+        font: 200;
+        font-size: 2rem;
+
+        width: 200px;
+        padding: 7px;
+        border-radius: 12px;
+        margin-left: 50px;
+        text-align: center;
+      }
+    }
+  </style>
+  <body>
+    <div class="main-section">
+      <label for="Minute"></label>
+      <input type="number" value="5" id="minute" />
+      <div class="buttons">
+        <button id="start" onclick="starttimer()">Start</button>
+        <button id="pause" onclick="pausetimer()" disabled>Pause</button>
+        <button id="reset" onclick="resettimer()" disabled>Reset</button>
+      </div>
+      <div id="timer">00:00:00</div>
+    </div>
+    <script>
+      let interval;
+      let count = false;
+
+      const starttimer = () => {
+        let appendminute = document.getElementById("minute");
+        let startbtn = document.getElementById("start");
+        let pausebtn = document.getElementById("pause");
+        let resetbtn = document.getElementById("reset");
+        let second = parseInt(appendminute.value) * 60;
+
+        startbtn.disabled = true;
+        pausebtn.disabled = false;
+        resetbtn.disabled = false;
+
+        interval = setInterval(function () {
+          if (!count) {
+            second--;
+
+            if (second < 0) {
+              clearInterval(interval);
+              pausebtn.disabled = true;
+              resetbtn.disabled = true;
+            } else {
+              updatetimerdisplay(second);
+            }
+          }
+        }, 1000);
+      };
+
+      const pausetimer = () => {
+        count = !count;
+        const pausebtn = document.getElementById("pause");
+        pausebtn.innerHTML = count ? "resume " : "pause";
+      };
+
+      const resettimer = () => {
+        clearInterval(interval);
+        let appendminute = document.getElementById("minute");
+        let startbtn = document.getElementById("start");
+        let pausebtn = document.getElementById("pause");
+        let resetbtn = document.getElementById("reset");
+        const timerdisplay = document.getElementById("timer");
+        appendminute.value = "5";
+        timerdisplay.innerText = "00:00:00";
+        startbtn.disabled = false;
+        pausebtn.disabled = true;
+        resetbtn.disabled = true;
+      };
+      function updatetimerdisplay(second) {
+        const timerdisplay = document.getElementById("timer");
+        const minute = Math.floor(second / 60);
+        const seconds = second % 60;
+        timerdisplay.innerText = ` 00 : ${String(minute).padStart(
+          2,
+          "0"
+        )} :${String(seconds).padStart(2, "0")}   `;
+      }
+    </script>
+  </body>
+</html>
